@@ -1,5 +1,5 @@
 import { ImageSegmenter } from '@mediapipe/tasks-vision';
-import { DetectionResult } from '../types';
+import { DetectionResult } from '../../components/MediaPipe/types';
 
 export async function performSegmentation(
   imageSegmenter: ImageSegmenter,

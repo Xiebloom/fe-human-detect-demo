@@ -1,4 +1,4 @@
-import type { DetectionResult } from '../types';
+import type { DetectionResult } from '../../components/MediaPipe/types';
 
 // Background color options
 const BACKGROUND_COLORS = [

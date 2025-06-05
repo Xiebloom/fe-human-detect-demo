@@ -1,7 +1,7 @@
-import type { DetectionResult } from '../types';
-import { drawConnectors } from '../utils/drawingUtils';
+import type { DetectionResult } from '../../components/MediaPipe/types';
+import { drawConnectors } from '../../components/MediaPipe/utils/drawingUtils';
 
-export function drawLandmarks(
+export function drawFaceLandmarks(
   detectionResult: DetectionResult,
   canvas: HTMLCanvasElement,
   element: HTMLImageElement | HTMLVideoElement

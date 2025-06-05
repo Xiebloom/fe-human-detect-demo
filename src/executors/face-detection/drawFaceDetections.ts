@@ -1,6 +1,6 @@
-import type { DetectionResult } from '../types';
+import type { DetectionResult } from '../../components/MediaPipe/types';
 
-export function drawDetections(
+export function drawFaceDetections(
   detectionResult: DetectionResult,
   canvas: HTMLCanvasElement,
   element: HTMLImageElement | HTMLVideoElement

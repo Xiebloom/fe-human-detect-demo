@@ -1,5 +1,5 @@
 import { PoseLandmarker } from '@mediapipe/tasks-vision';
-import { DetectionResult } from '../types';
+import { DetectionResult } from '../../components/MediaPipe/types';
 
 export async function detectPoseLandmarks(
   poseLandmarker: PoseLandmarker,

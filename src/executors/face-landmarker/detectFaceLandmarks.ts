@@ -1,5 +1,5 @@
 import { FaceLandmarker } from '@mediapipe/tasks-vision';
-import { DetectionResult } from '../types/index';
+import { DetectionResult } from '../../components/MediaPipe/types/index';
 
 export async function detectFaceLandmarks(
   faceLandmarker: FaceLandmarker,

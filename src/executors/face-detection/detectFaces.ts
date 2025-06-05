@@ -1,5 +1,5 @@
 import { FaceDetector } from '@mediapipe/tasks-vision';
-import type { DetectionResult } from '../types';
+import type { DetectionResult } from '../../components/MediaPipe/types';
 
 export async function detectFaces(
   faceDetector: FaceDetector,
