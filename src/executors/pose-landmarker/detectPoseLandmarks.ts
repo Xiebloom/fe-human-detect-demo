@@ -1,13 +1,18 @@
-import { PoseLandmarker, PoseLandmarkerResult } from '@mediapipe/tasks-vision';
+import { PoseLandmarker, PoseLandmarkerResult } from "@mediapipe/tasks-vision";
 
 export async function detectPoseLandmarks(
   poseLandmarker: PoseLandmarker,
-  imageElement: HTMLImageElement | HTMLVideoElement
+  mediaElement: HTMLImageElement | HTMLVideoElement
 ): Promise<PoseLandmarkerResult> {
+  const mediaType = mediaElement instanceof HTMLImageElement ? "image" : "video";
+
   try {
     // Detect pose landmarks
-    const poseResults = poseLandmarker.detect(imageElement);
-    
+    const poseResults =
+      mediaType === "image"
+        ? poseLandmarker.detect(mediaElement)
+        : poseLandmarker.detectForVideo(mediaElement, Date.now());
+
     // Return the detection results with pose landmarks
     return poseResults;
   } catch (error) {

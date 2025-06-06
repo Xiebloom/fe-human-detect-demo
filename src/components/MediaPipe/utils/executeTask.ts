@@ -3,9 +3,9 @@ import { createFaceLandmarker, detectFaceLandmarks, drawFaceLandmarks } from "@/
 import { createSegmenter, performSegmentation, drawSegmentation } from "@/executors/person-background-segmentation";
 import { createPoseLandmarker, detectPoseLandmarks, drawPoseLandmarks } from "@/executors/pose-landmarker";
 import { runExecutor } from "@/utils/runExecutor";
-import { AnalysisMode } from "../types";
+import { AnalysisMode, MediaType } from "../types";
 
-export async function executeTask(mode: AnalysisMode, executorContext) {
+export async function executeTask(mode: AnalysisMode, mediaType: MediaType, executorContext) {
   // Run the appropriate detection based on the selected mode
   switch (mode) {
     case "detection":
@@ -21,6 +21,17 @@ export async function executeTask(mode: AnalysisMode, executorContext) {
       );
       break;
     case "pose":
+      if (mediaType === "video") {
+        runExecutor(
+          () => createPoseLandmarker("VIDEO"),
+          detectPoseLandmarks,
+          drawPoseLandmarks,
+          "Pose Detection VIDEO",
+          executorContext
+        );
+        break;
+      }
+
       await runExecutor(
         createPoseLandmarker,
         detectPoseLandmarks,

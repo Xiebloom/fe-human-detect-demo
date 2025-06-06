@@ -1,25 +1,48 @@
-import type { PoseLandmarkerResult, NormalizedLandmark } from '@mediapipe/tasks-vision';
+import type { PoseLandmarkerResult } from "@mediapipe/tasks-vision";
 
 // Define pose connections
 const POSE_CONNECTIONS = [
   // Torso
-  [11, 12], [12, 24], [24, 23], [23, 11],
+  [11, 12],
+  [12, 24],
+  [24, 23],
+  [23, 11],
   // Left arm
-  [11, 13], [13, 15], [15, 17], [17, 19], [19, 15], [15, 21],
+  [11, 13],
+  [13, 15],
+  [15, 17],
+  [17, 19],
+  [19, 15],
+  [15, 21],
   // Right arm
-  [12, 14], [14, 16], [16, 18], [18, 20], [20, 16], [16, 22],
+  [12, 14],
+  [14, 16],
+  [16, 18],
+  [18, 20],
+  [20, 16],
+  [16, 22],
   // Left leg
-  [23, 25], [25, 27], [27, 29], [29, 31], [31, 27],
+  [23, 25],
+  [25, 27],
+  [27, 29],
+  [29, 31],
+  [31, 27],
   // Right leg
-  [24, 26], [26, 28], [28, 30], [30, 32], [32, 28]
+  [24, 26],
+  [26, 28],
+  [28, 30],
+  [30, 32],
+  [32, 28],
 ];
 
 export function drawPoseLandmarks(
-  detectionResult: PoseLandmarkerResult & { segmentationMasks?: Array<{ width: number; height: number; getAsFloat32Array(): Float32Array }> },
+  detectionResult: PoseLandmarkerResult & {
+    segmentationMasks?: Array<{ width: number; height: number; getAsFloat32Array(): Float32Array }>;
+  },
   canvas: HTMLCanvasElement,
   element: HTMLImageElement | HTMLVideoElement
 ): void {
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext("2d");
   if (!ctx || !detectionResult.landmarks || detectionResult.landmarks.length === 0) return;
 
   // Clear previous drawings
@@ -34,35 +57,8 @@ export function drawPoseLandmarks(
   }
 
   // Draw each detected pose
-  detectionResult.landmarks.forEach(poseLandmarks => {
-    // Draw landmark points
-    for (const landmark of poseLandmarks) {
-      ctx.fillStyle = '#FF0000';
-      ctx.beginPath();
-      ctx.arc(
-        landmark.x * canvas.width,
-        landmark.y * canvas.height,
-        3, // point size
-        0,
-        2 * Math.PI
-      );
-      ctx.fill();
-    }
-
-    // Draw connections between landmarks
-    drawConnectors(
-      ctx, 
-      poseLandmarks, 
-      POSE_CONNECTIONS, 
-      canvas.width, 
-      canvas.height,
-      '#00FF00', // green connections
-      2 // line width
-    );
-  });
+  // drawPoseLandmarkers(detectionResult, ctx, canvas);
 }
-
-// Using NormalizedLandmark from @mediapipe/tasks-vision
 
 // Function to draw segmentation mask
 function drawSegmentationMask(ctx, segmentationMask) {
@@ -147,32 +143,67 @@ function drawSegmentationMask(ctx, segmentationMask) {
   }
 }
 
+// function drawPoseLandmarkers(
+//   detectionResult: PoseLandmarkerResult & {
+//     segmentationMasks?: Array<{ width: number; height: number; getAsFloat32Array(): Float32Array }>;
+//   },
+//   ctx: CanvasRenderingContext2D,
+//   canvas: HTMLCanvasElement
+// ) {
+//   detectionResult.landmarks.forEach((poseLandmarks) => {
+//     // Draw landmark points
+//     for (const landmark of poseLandmarks) {
+//       ctx.fillStyle = "#FF0000";
+//       ctx.beginPath();
+//       ctx.arc(
+//         landmark.x * canvas.width,
+//         landmark.y * canvas.height,
+//         3, // point size
+//         0,
+//         2 * Math.PI
+//       );
+//       ctx.fill();
+//     }
+
+//     // Draw connections between landmarks
+//     drawConnectors(
+//       ctx,
+//       poseLandmarks,
+//       POSE_CONNECTIONS,
+//       canvas.width,
+//       canvas.height,
+//       "#00FF00", // green connections
+//       2
+//     );
+//   });
+// }
+
 /**
  * Draw connectors (lines) between landmarks
  */
-function drawConnectors(
-  ctx: CanvasRenderingContext2D,
-  landmarks: NormalizedLandmark[],
-  connections: number[][],
-  canvasWidth: number,
-  canvasHeight: number,
-  color: string = '#00FF00',
-  lineWidth: number = 2
-): void {
-  if (!landmarks || !connections) return;
+// function drawConnectors(
+//   ctx: CanvasRenderingContext2D,
+//   landmarks: NormalizedLandmark[],
+//   connections: number[][],
+//   canvasWidth: number,
+//   canvasHeight: number,
+//   color: string = "#00FF00",
+//   lineWidth: number = 2
+// ): void {
+//   if (!landmarks || !connections) return;
 
-  ctx.strokeStyle = color;
-  ctx.lineWidth = lineWidth;
+//   ctx.strokeStyle = color;
+//   ctx.lineWidth = lineWidth;
 
-  for (const connection of connections) {
-    const from = landmarks[connection[0]];
-    const to = landmarks[connection[1]];
-    
-    if (from && to) {
-      ctx.beginPath();
-      ctx.moveTo(from.x * canvasWidth, from.y * canvasHeight);
-      ctx.lineTo(to.x * canvasWidth, to.y * canvasHeight);
-      ctx.stroke();
-    }
-  }
-}
+//   for (const connection of connections) {
+//     const from = landmarks[connection[0]];
+//     const to = landmarks[connection[1]];
+
+//     if (from && to) {
+//       ctx.beginPath();
+//       ctx.moveTo(from.x * canvasWidth, from.y * canvasHeight);
+//       ctx.lineTo(to.x * canvasWidth, to.y * canvasHeight);
+//       ctx.stroke();
+//     }
+//   }
+// }

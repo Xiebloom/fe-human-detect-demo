@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MediaPipeProvider, useMediaPipe } from "../../context/MediaPipeContext.tsx";
-import "./MediaPipeDemo.css";
 import type { AnalysisMode, MediaType } from "./types";
 import { executeTask } from "./utils/executeTask.ts";
+
+import "./MediaPipeDemo.css";
 
 // Inner component using the context
 const MediaPipeDemoInner: React.FC = () => {
@@ -57,6 +58,7 @@ const MediaPipeDemoInner: React.FC = () => {
           videoRef.current.src = result;
           videoRef.current.onloadeddata = () => {
             updateStatus("Video loaded", "success");
+            videoRef.current?.play();
           };
         }
       }
@@ -91,7 +93,7 @@ const MediaPipeDemoInner: React.FC = () => {
       },
     };
 
-    executeTask(currentMode, executorContext);
+    executeTask(currentMode, currentMediaType, executorContext);
   }, [currentMode, currentMediaType, imageRef.current?.src, videoRef.current?.src]);
 
   return (
