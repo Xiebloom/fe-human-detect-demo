@@ -22,11 +22,14 @@ export async function runExecutor<T>(
   detectorFn: Detector<T>,
   drawerFn: Drawer,
   detectorName: string,
-  mediaElement: HTMLImageElement | HTMLVideoElement | null,
-  canvas: HTMLCanvasElement | null,
-  mediaType: MediaType,
-  mediaContext: MediaPipeContextType
+  context: {
+    mediaType: MediaType,
+    mediaElement: HTMLImageElement | HTMLVideoElement | null,
+    canvas: HTMLCanvasElement | null,
+    mediaContext: MediaPipeContextType
+  }
 ) {
+  const { mediaType, mediaElement, canvas, mediaContext } = context;
   const { updateStatus, updateDetectionTime } = mediaContext;
 
   // Initialize the detector
@@ -71,7 +74,7 @@ export async function runExecutor<T>(
     // Continue detection if it's video
     if (mediaType === 'video' && 'paused' in mediaElement && !mediaElement.paused) {
       requestAnimationFrame(() => {
-        runExecutor(creatorFn, detectorFn, drawerFn, detectorName, mediaElement, canvas, mediaType, mediaContext);
+        runExecutor(creatorFn, detectorFn, drawerFn, detectorName, context);
       });
     }
     

@@ -1,14 +1,8 @@
 import React, { useCallback, useRef, useState } from "react";
+import { MediaPipeProvider, useMediaPipe } from "../../context/MediaPipeContext.tsx";
 import "./MediaPipeDemo.css";
 import type { AnalysisMode, MediaType } from "./types";
-
-// Import all executors from the new directory structure
-import { createFaceDetector, detectFaces, drawFaceDetections } from "../../executors/face-detection";
-import { createFaceLandmarker, detectFaceLandmarks, drawFaceLandmarks } from "../../executors/face-landmarker";
-import { createPoseLandmarker, detectPoseLandmarks, drawPoseLandmarks } from "../../executors/pose-landmarker";
-import { createSegmenter, performSegmentation, drawSegmentation } from "../../executors/person-background-segmentation";
-import { useMediaPipe, MediaPipeProvider } from "../../context/MediaPipeContext.tsx";
-import { runExecutor } from "@/utils/runExecutor";
+import { executeTask } from "./utils/executeTask.ts";
 
 // Inner component using the context
 const MediaPipeDemoInner: React.FC = () => {
@@ -26,8 +20,6 @@ const MediaPipeDemoInner: React.FC = () => {
   } = useMediaPipe();
 
   const [fileName, setFileName] = useState("No file selected");
-
-  // Refs for media elements
   const imageRef = useRef<HTMLImageElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -40,101 +32,25 @@ const MediaPipeDemoInner: React.FC = () => {
     const mediaElement = currentMediaType === "video" ? videoRef.current : imageRef.current;
     if (!mediaElement || !canvasRef.current) return;
 
-    // Run the appropriate detection based on the selected mode
-    switch (mode) {
-      case "detection":
-        await runExecutor(
-          createFaceDetector,
-          detectFaces,
-          drawFaceDetections,
-          "Face Detection",
-          mediaElement,
-          canvasRef.current,
-          currentMediaType,
-          {
-            currentMode,
-            currentMediaType,
-            statusMessage,
-            statusType,
-            detectionTimeMs,
-            setCurrentMode,
-            setCurrentMediaType,
-            updateStatus,
-            updateDetectionTime,
-            runCurrentModeAnalysis,
-          }
-        );
-        break;
-      case "landmarks":
-        await runExecutor(
-          createFaceLandmarker,
-          detectFaceLandmarks,
-          drawFaceLandmarks,
-          "Face Landmarks",
-          mediaElement,
-          canvasRef.current,
-          currentMediaType,
-          {
-            currentMode,
-            currentMediaType,
-            statusMessage,
-            statusType,
-            detectionTimeMs,
-            setCurrentMode,
-            setCurrentMediaType,
-            updateStatus,
-            updateDetectionTime,
-            runCurrentModeAnalysis,
-          }
-        );
-        break;
-      case "pose":
-        await runExecutor(
-          createPoseLandmarker,
-          detectPoseLandmarks,
-          drawPoseLandmarks,
-          "Pose Detection",
-          mediaElement,
-          canvasRef.current,
-          currentMediaType,
-          {
-            currentMode,
-            currentMediaType,
-            statusMessage,
-            statusType,
-            detectionTimeMs,
-            setCurrentMode,
-            setCurrentMediaType,
-            updateStatus,
-            updateDetectionTime,
-            runCurrentModeAnalysis,
-          }
-        );
-        break;
-      case "segmentation":
-        await runExecutor(
-          createSegmenter,
-          performSegmentation,
-          drawSegmentation,
-          "Segmentation",
-          mediaElement,
-          canvasRef.current,
-          currentMediaType,
-          {
-            currentMode,
-            currentMediaType,
-            statusMessage,
-            statusType,
-            detectionTimeMs,
-            setCurrentMode,
-            setCurrentMediaType,
-            updateStatus,
-            updateDetectionTime,
-            runCurrentModeAnalysis,
-          }
-        );
-        break;
-    }
+    const executorContext = {
+      mediaElement,
+      canvas: canvasRef.current,
+      mediaType: currentMediaType,
+      mediaContext: {
+        currentMode,
+        currentMediaType,
+        statusMessage,
+        statusType,
+        detectionTimeMs,
+        setCurrentMode,
+        setCurrentMediaType,
+        updateStatus,
+        updateDetectionTime,
+        runCurrentModeAnalysis,
+      },
+    };
+
+    await executeTask(mode, executorContext);
   };
 
   // Handle file upload
@@ -179,17 +95,16 @@ const MediaPipeDemoInner: React.FC = () => {
     [setCurrentMediaType, updateStatus]
   );
 
-  // No need to render separate components anymore
-  // Detection is now triggered directly from handleModeChange
-
   return (
     <div className="container">
+      {/* title and info */}
       <h1>MediaPipe Analysis Demo</h1>
       <div className={`status ${statusType}`}>{statusMessage}</div>
       <div className="info" style={{ marginTop: "15px" }}>
         <p>Detection Time: {detectionTimeMs} ms</p>
       </div>
 
+      {/* controls */}
       <div className="controls">
         <button
           className={`btn ${currentMode === "detection" ? "active" : ""}`}
@@ -214,6 +129,7 @@ const MediaPipeDemoInner: React.FC = () => {
         </button>
       </div>
 
+      {/* upload */}
       <div className="upload-container">
         <div className="file-input-wrapper">
           <button className="file-input-btn">Upload Media</button>
@@ -222,10 +138,11 @@ const MediaPipeDemoInner: React.FC = () => {
         <span className="file-name">{fileName}</span>
       </div>
 
+      {/* media */}
       <div className="media-container">
         <img
           ref={imageRef}
-          src="imgs/default.png"
+          src="/imgs/default.png"
           alt="Input image for detection"
           style={{ maxWidth: "100%", display: currentMediaType === "image" ? "block" : "none" }}
         />
@@ -234,6 +151,8 @@ const MediaPipeDemoInner: React.FC = () => {
           controls
           style={{ maxWidth: "100%", display: currentMediaType === "video" ? "block" : "none" }}
         ></video>
+
+        {/* canvas */}
         <canvas ref={canvasRef} id="output-canvas"></canvas>
       </div>
     </div>
@@ -248,5 +167,4 @@ const MediaPipeDemo: React.FC = () => {
     </MediaPipeProvider>
   );
 };
-
 export default MediaPipeDemo;
