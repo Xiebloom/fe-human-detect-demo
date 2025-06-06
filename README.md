@@ -1,54 +1,81 @@
-# React + TypeScript + Vite
+# MediaPipe Demo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+这是一个基于 React、TypeScript、Vite 和 MediaPipe 构建的示例项目，旨在演示 MediaPipe 强大的实时视觉处理能力，例如人脸检测、姿态估计等。
 
-Currently, two official plugins are available:
+## ✨ 功能特性
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **实时人脸检测**：在视频流或静态图片中检测人脸，并绘制边界框。
+- **实时姿态估计**：在视频流或静态图片中识别人体关键点和骨骼连接。
+- **多种分析模式**：支持图片上传和实时摄像头视频流分析。
+- **可扩展执行器**：模块化的代码结构，方便添加更多 MediaPipe 任务。
 
-## Expanding the ESLint configuration
+## 🛠️ 技术栈
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **前端框架**: [React](https://reactjs.org/)
+- **编程语言**: [TypeScript](https://www.typescriptlang.org/)
+- **构建工具**: [Vite](https://vitejs.dev/)
+- **视觉处理**: [MediaPipe Tasks Vision](https://developers.google.com/mediapipe/solutions/vision)
+- **UI 组件**: 基础 HTML 和 CSS
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 🚀 如何运行
+
+1.  **克隆项目**
+
+    ```bash
+    git clone <your-repository-url>
+    cd media-pipe-demo
+    ```
+
+2.  **安装依赖**
+
+    推荐使用 `npm` 或 `yarn`：
+
+    ```bash
+    npm install
+    # 或者
+    yarn install
+    ```
+
+3.  **启动开发服务器**
+
+    ```bash
+    npm run dev
+    # 或者
+    yarn dev
+    ```
+
+    应用将在本地启动，通常地址为 `http://localhost:5173`。
+
+4.  **构建项目**
+
+    ```bash
+    npm run build
+    # 或者
+    yarn build
+    ```
+
+    构建后的静态文件将输出到 `dist` 目录。
+
+## 📂 项目结构
+
 ```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+media-pipe-demo/
+├── public/               # 静态资源
+├── src/
+│   ├── assets/           # 图片、字体等资源
+│   ├── components/       # React 组件
+│   │   └── MediaPipe/    # MediaPipe核心组件和逻辑
+│   ├── context/          # React Context
+│   ├── executors/        # MediaPipe任务执行器 (如人脸检测、姿态估计)
+│   │   ├── face-detection/
+│   │   └── pose-landmarker/
+│   ├── types/            # TypeScript 类型定义
+│   ├── utils/            # 通用工具函数
+│   ├── App.tsx           # 应用主组件
+│   └── main.tsx          # 应用入口文件
+├── index.html            # HTML 入口文件
+├── package.json          # 项目依赖和脚本配置
+├── tsconfig.json         # TypeScript 配置文件
+├── vite.config.ts        # Vite 配置文件
+└── README.md             # 就是你现在看到的这个文件
 ```
