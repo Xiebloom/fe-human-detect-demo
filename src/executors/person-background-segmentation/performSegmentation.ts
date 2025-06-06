@@ -1,18 +1,15 @@
-import { ImageSegmenter } from '@mediapipe/tasks-vision';
-import { DetectionResult } from '../../components/MediaPipe/types';
+import { ImageSegmenter, ImageSegmenterResult } from "@mediapipe/tasks-vision";
 
 export async function performSegmentation(
   imageSegmenter: ImageSegmenter,
   imageElement: HTMLImageElement | HTMLVideoElement
-): Promise<DetectionResult> {
+): Promise<ImageSegmenterResult> {
   try {
     // Perform image segmentation
     const segmentationResult = imageSegmenter.segment(imageElement);
-    
+
     // Return the segmentation results
-    return {
-      segmentation: segmentationResult.categoryMask
-    };
+    return segmentationResult;
   } catch (error) {
     console.error("Segmentation failed:", error);
     throw new Error("Segmentation failed");

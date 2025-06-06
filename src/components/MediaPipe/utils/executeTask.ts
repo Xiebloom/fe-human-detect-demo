@@ -5,7 +5,9 @@ import { createPoseLandmarker, detectPoseLandmarks, drawPoseLandmarks } from "@/
 import { runExecutor } from "@/utils/runExecutor";
 import { AnalysisMode, MediaType } from "../types";
 
-export async function executeTask(mode: AnalysisMode, mediaType: MediaType, executorContext) {
+type Context = Parameters<typeof runExecutor>[4];
+
+export async function executeTask(mode: AnalysisMode, mediaType: MediaType, executorContext: Context) {
   // Run the appropriate detection based on the selected mode
   switch (mode) {
     case "detection":

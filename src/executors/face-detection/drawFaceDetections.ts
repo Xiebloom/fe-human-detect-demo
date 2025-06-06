@@ -3,7 +3,7 @@ import { FaceDetectorResult } from "@mediapipe/tasks-vision";
 export function drawFaceDetections(
   detectionResult: FaceDetectorResult,
   canvas: HTMLCanvasElement,
-  element: HTMLImageElement
+  element: HTMLImageElement | HTMLVideoElement
 ): void {
   const ctx = canvas.getContext("2d");
   if (!ctx || !detectionResult.detections) return;
@@ -15,8 +15,8 @@ export function drawFaceDetections(
   ctx.drawImage(element, 0, 0, canvas.width, canvas.height);
 
   // Get the natural dimensions of the image
-  const naturalWidth = element.naturalWidth;
-  const naturalHeight = element.naturalHeight;
+  const naturalWidth = element?.naturalWidth ?? element.width;
+  const naturalHeight = element?.naturalHeight ?? element.height;
 
   // Set canvas dimensions to match the displayed image
   canvas.width = element.width;
