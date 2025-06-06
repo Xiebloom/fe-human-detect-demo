@@ -1,14 +1,14 @@
 import React, { useCallback, useRef, useState } from "react";
-import { MediaPipeProvider, useMediaPipe } from "./context/MediaPipeContext";
 import "./MediaPipeDemo.css";
 import type { AnalysisMode, MediaType } from "./types";
-import { runExecutor } from "./utils/runExecutor.ts";
 
 // Import all executors from the new directory structure
 import { createFaceDetector, detectFaces, drawFaceDetections } from "../../executors/face-detection";
 import { createFaceLandmarker, detectFaceLandmarks, drawFaceLandmarks } from "../../executors/face-landmarker";
 import { createPoseLandmarker, detectPoseLandmarks, drawPoseLandmarks } from "../../executors/pose-landmarker";
 import { createSegmenter, performSegmentation, drawSegmentation } from "../../executors/person-background-segmentation";
+import { useMediaPipe, MediaPipeProvider } from "../../context/MediaPipeContext.tsx";
+import { runExecutor } from "@/utils/runExecutor";
 
 // Inner component using the context
 const MediaPipeDemoInner: React.FC = () => {

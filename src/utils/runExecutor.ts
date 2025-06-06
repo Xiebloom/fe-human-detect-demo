@@ -1,4 +1,4 @@
-import type { MediaType, DetectionResult, MediaPipeContextType } from '../types/index';
+import type { MediaType, DetectionResult, MediaPipeContextType } from '../components/MediaPipe/types';
 
 type Creator<T> = () => Promise<T>;
 type Detector<T> = (detector: T, element: HTMLImageElement | HTMLVideoElement) => Promise<DetectionResult>;

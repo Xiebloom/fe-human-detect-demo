@@ -1,5 +1,5 @@
 import type { DetectionResult } from '../../components/MediaPipe/types';
-import { drawConnectors } from '../../components/MediaPipe/utils/drawingUtils';
+import { drawConnectors } from '../../utils/drawingUtils';
 
 export function drawFaceLandmarks(
   detectionResult: DetectionResult,
