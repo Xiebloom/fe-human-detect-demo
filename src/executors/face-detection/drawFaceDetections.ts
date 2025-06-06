@@ -1,11 +1,11 @@
-import type { DetectionResult } from '../../components/MediaPipe/types';
+import { FaceDetectorResult } from "@mediapipe/tasks-vision";
 
 export function drawFaceDetections(
-  detectionResult: DetectionResult,
+  detectionResult: FaceDetectorResult,
   canvas: HTMLCanvasElement,
-  element: HTMLImageElement | HTMLVideoElement
+  element: HTMLImageElement
 ): void {
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext("2d");
   if (!ctx || !detectionResult.detections) return;
 
   // Clear previous drawings
@@ -14,43 +14,41 @@ export function drawFaceDetections(
   // Draw the image or video frame first
   ctx.drawImage(element, 0, 0, canvas.width, canvas.height);
 
+  // Get the natural dimensions of the image
+  const naturalWidth = element.naturalWidth;
+  const naturalHeight = element.naturalHeight;
+
+  // Set canvas dimensions to match the displayed image
+  canvas.width = element.width;
+  canvas.height = element.height;
+
+  // Calculate scaling factors between natural image size and displayed size
+  const scaleX = canvas.width / naturalWidth;
+  const scaleY = canvas.height / naturalHeight;
+
   // Loop through each detection and draw a rectangle
-  detectionResult.detections.forEach(detection => {
+  detectionResult.detections.forEach((detection) => {
     const bbox = detection.boundingBox;
     if (!bbox) return;
 
     // Set drawing style
-    ctx.strokeStyle = '#FF0000';
+    ctx.strokeStyle = "#FF0000";
     ctx.lineWidth = 4;
-    ctx.fillStyle = 'rgba(255, 0, 0, 0.2)';
+    ctx.fillStyle = "rgba(255, 0, 0, 0.2)";
 
     // Draw rectangle
-    ctx.strokeRect(
-      bbox.originX * canvas.width,
-      bbox.originY * canvas.height,
-      bbox.width * canvas.width,
-      bbox.height * canvas.height
-    );
-    
-    ctx.fillRect(
-      bbox.originX * canvas.width,
-      bbox.originY * canvas.height,
-      bbox.width * canvas.width,
-      bbox.height * canvas.height
-    );
+    ctx.strokeRect(bbox.originX * scaleX, bbox.originY * scaleY, bbox.width * scaleX, bbox.height * scaleY);
+
+    ctx.fillRect(bbox.originX * scaleX, bbox.originY * scaleY, bbox.width * scaleX, bbox.height * scaleY);
 
     // Draw confidence score
     if (detection.categories && detection.categories[0]) {
       const score = detection.categories[0].score;
       const scoreText = `${Math.round(score * 100)}%`;
-      
-      ctx.fillStyle = '#FF0000';
-      ctx.font = '18px Arial';
-      ctx.fillText(
-        scoreText,
-        bbox.originX * canvas.width,
-        (bbox.originY * canvas.height) - 5
-      );
+
+      ctx.fillStyle = "#FF0000";
+      ctx.font = "18px Arial";
+      ctx.fillText(scoreText, bbox.originX * canvas.width, bbox.originY * canvas.height - 5);
     }
   });
 }
