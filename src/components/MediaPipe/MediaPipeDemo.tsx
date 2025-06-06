@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MediaPipeProvider, useMediaPipe } from "../../context/MediaPipeContext.tsx";
 import "./MediaPipeDemo.css";
 import type { AnalysisMode, MediaType } from "./types";
@@ -28,7 +28,48 @@ const MediaPipeDemoInner: React.FC = () => {
   const handleModeChange = async (mode: AnalysisMode) => {
     setCurrentMode(mode);
     updateStatus(`Switched to ${mode} mode`, "info");
+  };
 
+  // Handle file upload
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    const isVideo = file.type.startsWith("video/");
+    const mediaType: MediaType = isVideo ? "video" : "image";
+
+    setCurrentMediaType(mediaType);
+    setFileName(file.name);
+
+    reader.onload = (e) => {
+      const result = e.target?.result as string;
+
+      if (mediaType === "image") {
+        if (imageRef.current) {
+          imageRef.current.src = result;
+          imageRef.current.onload = () => {
+            updateStatus("Image loaded", "success");
+          };
+        }
+      } else {
+        if (videoRef.current) {
+          videoRef.current.src = result;
+          videoRef.current.onloadeddata = () => {
+            updateStatus("Video loaded", "success");
+          };
+        }
+      }
+    };
+
+    reader.onerror = () => {
+      updateStatus("Error loading file", "error");
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  useEffect(() => {
     const mediaElement = currentMediaType === "video" ? videoRef.current : imageRef.current;
     if (!mediaElement || !canvasRef.current) return;
 
@@ -50,50 +91,8 @@ const MediaPipeDemoInner: React.FC = () => {
       },
     };
 
-    await executeTask(mode, executorContext);
-  };
-
-  // Handle file upload
-  const handleFileUpload = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      const isVideo = file.type.startsWith("video/");
-      const mediaType: MediaType = isVideo ? "video" : "image";
-
-      setCurrentMediaType(mediaType);
-      setFileName(file.name);
-
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-
-        if (mediaType === "image") {
-          if (imageRef.current) {
-            imageRef.current.src = result;
-            imageRef.current.onload = () => {
-              updateStatus("Image loaded", "success");
-            };
-          }
-        } else {
-          if (videoRef.current) {
-            videoRef.current.src = result;
-            videoRef.current.onloadeddata = () => {
-              updateStatus("Video loaded", "success");
-            };
-          }
-        }
-      };
-
-      reader.onerror = () => {
-        updateStatus("Error loading file", "error");
-      };
-
-      reader.readAsDataURL(file);
-    },
-    [setCurrentMediaType, updateStatus]
-  );
+    executeTask(currentMode, executorContext);
+  }, [currentMode, currentMediaType, imageRef.current?.src, videoRef.current?.src]);
 
   return (
     <div className="container">

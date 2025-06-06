@@ -1,5 +1,3 @@
-import type { NormalizedLandmark } from '@mediapipe/tasks-vision';
-
 export type AnalysisMode = 'detection' | 'landmarks' | 'pose' | 'segmentation';
 export type MediaType = 'image' | 'video';
 export type StatusType = 'info' | 'success' | 'error';
@@ -19,27 +17,6 @@ export interface FaceDetectionResult {
   }[];
 }
 
-// Combined detection result with optional properties for all modes
-export interface DetectionResult {
-  // Face detection
-  detections?: FaceDetectionResult[];
-  
-  // Face landmarks
-  landmarks?: NormalizedLandmark[][];
-  faceBlendshapes?: any[];
-  facialTransformationMatrixes?: any[];
-  
-  // Pose landmarker
-  poses?: NormalizedLandmark[][];
-  worldPoses?: NormalizedLandmark[][];
-  
-  // Segmentation
-  segmentation?: {
-    width: number;
-    height: number;
-    getAsFloat32Array(): Float32Array;
-  };
-}
 
 // Main MediaPipe context interface
 export interface MediaPipeContextType {

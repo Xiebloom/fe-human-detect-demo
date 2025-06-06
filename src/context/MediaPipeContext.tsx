@@ -1,19 +1,19 @@
-import React, { createContext, useContext, useState } from 'react';
-import type { ReactNode } from 'react';
-import type { MediaPipeContextType, AnalysisMode, MediaType, StatusType } from '../types';
+import { MediaPipeContextType, AnalysisMode, MediaType, StatusType } from "@/components/MediaPipe/types";
+import React, { createContext, useContext, useState } from "react";
+import type { ReactNode } from "react";
 
 // Create context with default values
-const MediaPipeContext = createContext<MediaPipeContextType>({
-  currentMode: 'detection',
-  currentMediaType: 'image',
-  statusMessage: 'Ready',
-  statusType: 'info',
-  detectionTimeMs: '0',
+export const MediaPipeContext = createContext<MediaPipeContextType>({
+  currentMode: "pose",
+  currentMediaType: "image",
+  statusMessage: "Ready",
+  statusType: "info",
+  detectionTimeMs: "0",
   setCurrentMode: () => {},
   setCurrentMediaType: () => {},
   updateStatus: () => {},
   updateDetectionTime: () => {},
-  runCurrentModeAnalysis: () => {}
+  runCurrentModeAnalysis: () => {},
 });
 
 // Provider component
@@ -22,14 +22,14 @@ interface MediaPipeProviderProps {
 }
 
 export const MediaPipeProvider: React.FC<MediaPipeProviderProps> = ({ children }) => {
-  const [currentMode, setCurrentMode] = useState<AnalysisMode>('detection');
-  const [currentMediaType, setCurrentMediaType] = useState<MediaType>('image');
-  const [statusMessage, setStatusMessage] = useState('Ready');
-  const [statusType, setStatusType] = useState<StatusType>('info'); 
-  const [detectionTimeMs, setDetectionTimeMs] = useState<string>('0');
+  const [currentMode, setCurrentMode] = useState<AnalysisMode>("pose");
+  const [currentMediaType, setCurrentMediaType] = useState<MediaType>("image");
+  const [statusMessage, setStatusMessage] = useState("Ready");
+  const [statusType, setStatusType] = useState<StatusType>("info");
+  const [detectionTimeMs, setDetectionTimeMs] = useState<string>("0");
 
   // Update status message and type
-  const updateStatus = (message: string, type: StatusType = 'info') => {
+  const updateStatus = (message: string, type: StatusType = "info") => {
     setStatusMessage(message);
     setStatusType(type);
   };
@@ -41,7 +41,7 @@ export const MediaPipeProvider: React.FC<MediaPipeProviderProps> = ({ children }
 
   // Placeholder function to be overridden by component implementation
   const runCurrentModeAnalysis = () => {
-    console.log('Analysis function not implemented');
+    console.log("Analysis function not implemented");
   };
 
   return (
@@ -56,7 +56,7 @@ export const MediaPipeProvider: React.FC<MediaPipeProviderProps> = ({ children }
         setCurrentMediaType,
         updateStatus,
         updateDetectionTime,
-        runCurrentModeAnalysis
+        runCurrentModeAnalysis,
       }}
     >
       {children}
@@ -64,5 +64,4 @@ export const MediaPipeProvider: React.FC<MediaPipeProviderProps> = ({ children }
   );
 };
 
-// Custom hook for using the context
 export const useMediaPipe = () => useContext(MediaPipeContext);

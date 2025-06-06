@@ -1,21 +1,15 @@
-import { FaceLandmarker } from '@mediapipe/tasks-vision';
-import { DetectionResult } from '../../components/MediaPipe/types/index';
+import { FaceLandmarker, type FaceLandmarkerResult } from '@mediapipe/tasks-vision';
 
 export async function detectFaceLandmarks(
   faceLandmarker: FaceLandmarker,
   imageElement: HTMLImageElement | HTMLVideoElement
-): Promise<DetectionResult> {
+): Promise<FaceLandmarkerResult> {
   try {
     // Detect face landmarks
     const landmarksResult = faceLandmarker.detect(imageElement);
     
-    // Return the detection results with landmarks
-    return {
-      landmarks: landmarksResult.faceLandmarks,
-      // Include other properties if needed
-      faceBlendshapes: landmarksResult.faceBlendshapes,
-      facialTransformationMatrixes: landmarksResult.facialTransformationMatrixes
-    };
+    // Return the detection results with face landmarks
+    return landmarksResult;
   } catch (error) {
     console.error("Face landmark detection failed:", error);
     throw new Error("Face landmark detection failed");

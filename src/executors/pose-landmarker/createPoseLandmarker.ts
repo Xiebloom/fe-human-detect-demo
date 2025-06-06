@@ -12,6 +12,7 @@ export async function createPoseLandmarker(): Promise<PoseLandmarker> {
         delegate: "GPU"
       },
       runningMode: "IMAGE",
+      outputSegmentationMasks: true,
       numPoses: 1
     });
     
