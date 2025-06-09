@@ -13,12 +13,16 @@ function Home() {
         <div className="feature-card">
           <h3>TensorFlow 演示</h3>
           <p>基于 TensorFlow.js 的人体检测与分析</p>
-          <Link to="/tensorflow" className="feature-btn">查看演示</Link>
+          <Link to="/tensorflow" className="feature-btn">
+            查看演示
+          </Link>
         </div>
         <div className="feature-card">
           <h3>MediaPipe 演示</h3>
           <p>基于 MediaPipe 的面部检测与姿态分析</p>
-          <Link to="/mediapipe" className="feature-btn">查看演示</Link>
+          <Link to="/mediapipe" className="feature-btn">
+            查看演示
+          </Link>
         </div>
       </div>
     </div>
@@ -32,9 +36,15 @@ function App() {
         <header>
           <h2 className="logo">「字在人后」</h2>
           <nav className="main-nav">
-            <Link to="/" className="nav-btn home-btn">首页</Link>
-            <Link to="/tensorflow" className="nav-btn">TensorFlow Demo</Link>
-            <Link to="/mediapipe" className="nav-btn">MediaPipe Demo</Link>
+            <Link to="/" className="nav-btn home-btn">
+              首页
+            </Link>
+            <Link to="/tensorflow" className="nav-btn">
+              TensorFlow Demo
+            </Link>
+            <Link to="/mediapipe" className="nav-btn">
+              MediaPipe Demo
+            </Link>
           </nav>
         </header>
 
