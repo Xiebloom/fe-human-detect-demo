@@ -1,6 +1,6 @@
 import { ImageSegmenter, FilesetResolver } from "@mediapipe/tasks-vision";
 
-export async function createSegmenter(): Promise<ImageSegmenter> {
+export async function createSegmenter(runningMode: "IMAGE" | "VIDEO" = "IMAGE"): Promise<ImageSegmenter> {
   try {
     // Create a FilesetResolver to resolve dependencies
     const vision = await FilesetResolver.forVisionTasks(
@@ -14,7 +14,7 @@ export async function createSegmenter(): Promise<ImageSegmenter> {
           "https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_segmenter/float16/latest/selfie_segmenter.tflite",
         delegate: "GPU",
       },
-      runningMode: "IMAGE",
+      runningMode,
       outputCategoryMask: true,
       outputConfidenceMasks: true,
     });

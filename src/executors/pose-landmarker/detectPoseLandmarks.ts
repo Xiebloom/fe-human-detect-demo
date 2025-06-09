@@ -1,15 +1,16 @@
+import { RunningMode } from "@/types";
 import { PoseLandmarker, PoseLandmarkerResult } from "@mediapipe/tasks-vision";
 
 export async function detectPoseLandmarks(
   poseLandmarker: PoseLandmarker,
   mediaElement: HTMLImageElement | HTMLVideoElement
 ): Promise<PoseLandmarkerResult> {
-  const mediaType = mediaElement instanceof HTMLImageElement ? "image" : "video";
+  const runningMode: RunningMode = mediaElement instanceof HTMLImageElement ? "IMAGE" : "VIDEO";
 
   try {
     // Detect pose landmarks
     const poseResults =
-      mediaType === "image"
+      runningMode === "IMAGE"
         ? poseLandmarker.detect(mediaElement)
         : poseLandmarker.detectForVideo(mediaElement, Date.now());
 

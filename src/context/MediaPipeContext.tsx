@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 // Create context with default values
 export const MediaPipeContext = createContext<MediaPipeContextType>({
-  currentMode: "pose",
+  currentMode: "segmentation",
   currentMediaType: "image",
   statusMessage: "Ready",
   statusType: "info",
@@ -22,7 +22,7 @@ interface MediaPipeProviderProps {
 }
 
 export const MediaPipeProvider: React.FC<MediaPipeProviderProps> = ({ children }) => {
-  const [currentMode, setCurrentMode] = useState<AnalysisMode>("pose");
+  const [currentMode, setCurrentMode] = useState<AnalysisMode>("segmentation");
   const [currentMediaType, setCurrentMediaType] = useState<MediaType>("image");
   const [statusMessage, setStatusMessage] = useState("Ready");
   const [statusType, setStatusType] = useState<StatusType>("info");
