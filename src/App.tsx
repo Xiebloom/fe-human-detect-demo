@@ -8,12 +8,12 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 function Home() {
   return (
     <div className="home-container">
-      <h1>「字在人后」</h1>
-      <p className="welcome-text">欢迎体验我们的人体检测与分析演示应用</p>
+      <h1>人景分割</h1>
+      <p className="welcome-text">欢迎体验我们的人景分割演示应用</p>
       <div className="feature-cards">
         <div className="feature-card">
           <h3>TensorFlow 演示</h3>
-          <p>基于 TensorFlow.js 的人体检测与分析</p>
+          <p>基于 TensorFlow.js 的人景分割</p>
           <Link to="/tensorflow" className="feature-btn">
             查看演示
           </Link>
@@ -42,10 +42,6 @@ function App() {
             <Route path="/mediapipe" element={<MediaPipeDemo />} />
           </Routes>
         </main>
-
-        <footer>
-          <p> 2025 「字在人后」 - 人体检测与分析演示应用</p>
-        </footer>
       </div>
     </Router>
   );

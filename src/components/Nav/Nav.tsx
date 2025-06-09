@@ -7,7 +7,7 @@ export function Nav() {
 
   return (
     <header>
-      <h2 className="logo">「字在人后」</h2>
+      <h2 className="logo">人景分割</h2>
       <nav className="main-nav">
         <Link to="/" className="nav-btn">
           首页
