@@ -65,30 +65,26 @@ export async function runExecutor<T, R>(
 
   // Declare the main part of this task
   const detecteAndDraw = async () => {
-    // Calculate and show elapsed time
     const startTime = performance.now();
 
-    const shouldDetect = lastDetectTime === -1 || startTime - lastDetectTime > DETECT_THRESHOLD;
-
-    if (shouldDetect) {
+    const shouldDetectAndDraw = lastDetectTime === -1 || startTime - lastDetectTime > DETECT_THRESHOLD;
+    if (shouldDetectAndDraw) {
       console.log("detect!");
+
       lastDetectResult = await detect(detectorInstance, mediaElement);
+
       lastDetectTime = startTime;
       const endTime = performance.now();
       const elapsedTime = endTime - startTime;
       elapsedTimes.push(elapsedTime);
       updateDetectionTime(calAverageElapsedTime());
-    }
 
-    // Clear previous drawings
-    const ctx = canvas.getContext("2d");
-    if (ctx) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-    // Draw results
-    if (lastDetectResult) {
-      // draw(lastDetectResult, canvas, mediaElement);
+      // Clear previous drawings
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      draw(lastDetectResult, canvas, mediaElement);
     }
 
     // continue detection if it is video
@@ -104,7 +100,6 @@ export async function runExecutor<T, R>(
     } catch (error) {
       console.error(`Error in ${detectorName} detection:`, error);
       updateStatus(`${detectorName} detection error: ${error}`, "error");
-
       return null;
     }
   };

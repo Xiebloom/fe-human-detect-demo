@@ -2,8 +2,10 @@ import type { ImageSegmenterResult } from "@mediapipe/tasks-vision";
 
 // Background color options
 const BACKGROUND_COLORS = [
-  // Default transparent
+  // Default black mask
   { r: 0, g: 0, b: 0, a: 120 },
+  // White mask
+  { r: 255, g: 255, b: 255, a: 120 },
   // Blue background
   { r: 0, g: 120, b: 255, a: 255 },
   // Green screen
@@ -16,8 +18,8 @@ let currentBackgroundColorIndex = 0;
 
 export function drawSegmentation(
   detectionResult: ImageSegmenterResult,
-  canvas: HTMLCanvasElement,
-  element: HTMLImageElement | HTMLVideoElement
+  canvas: HTMLCanvasElement
+  // element: HTMLImageElement | HTMLVideoElement
 ): void {
   const ctx = canvas.getContext("2d");
   if (!ctx || !detectionResult.confidenceMasks) return;
@@ -26,16 +28,13 @@ export function drawSegmentation(
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // Draw the image or video frame first
-  ctx.drawImage(element, 0, 0, canvas.width, canvas.height);
+  // ctx.drawImage(element, 0, 0, canvas.width, canvas.height);
 
   // Get the segmentation mask
   const mask = detectionResult.confidenceMasks[0];
   const maskWidth = mask.width;
   const maskHeight = mask.height;
   const maskData = mask.getAsFloat32Array();
-
-  // Get the background color
-  const bgColor = BACKGROUND_COLORS[currentBackgroundColorIndex];
 
   // Create an image data object to manipulate pixels
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -59,12 +58,19 @@ export function drawSegmentation(
 
       // 如果当前像素属于背景 (maskValue 低于阈值)
       // 前景像素 (maskValue >= threshold) 则保持不变 (来自原始的drawImage)
+      const bgColor = BACKGROUND_COLORS[0];
+      const foregroundColor = BACKGROUND_COLORS[1];
       if (maskValue < threshold) {
         // 将背景像素替换为选择的背景颜色
         pixels[pixelIndex] = bgColor.r; // R
         pixels[pixelIndex + 1] = bgColor.g; // G
         pixels[pixelIndex + 2] = bgColor.b; // B
         pixels[pixelIndex + 3] = bgColor.a; // A
+      } else {
+        pixels[pixelIndex] = foregroundColor.r; // R
+        pixels[pixelIndex + 1] = foregroundColor.g; // G
+        pixels[pixelIndex + 2] = foregroundColor.b; // B
+        pixels[pixelIndex + 3] = foregroundColor.a; // A
       }
     }
   }
