@@ -25,6 +25,7 @@ export class SegmentationProcessor {
   private canvasCtx: CanvasRenderingContext2D | null = null;
   private camera: MediaStream | null = null;
   private isRunning = false;
+  private lastDetectTime: number = -1;
 
   constructor(options: Partial<SegmentationOptions> = {}) {
     // Initialize MediaPipe Selfie Segmentation
@@ -122,21 +123,33 @@ export class SegmentationProcessor {
   private async processFrames() {
     if (!this.isRunning || !this.videoElement) return;
 
+    // 检查视频是否播放完毕
+    if (this.videoElement.currentTime >= this.videoElement.duration && !this.videoElement.loop) {
+      console.log("Video playback completed");
+      this.isRunning = false;
+      return;
+    }
+
     // 记录开始时间
     const startTime = performance.now();
 
-    // Process the current frame
-    if (this.videoElement.readyState >= 2) {
-      await this.selfieSegmentation.send({ image: this.videoElement });
-    }
+    const shouldDetect = this.lastDetectTime === -1 || startTime - this.lastDetectTime >= 500;
+    if (shouldDetect) {
+      // Process the current frame
+      if (this.videoElement.readyState >= 2) {
+        await this.selfieSegmentation.send({ image: this.videoElement });
+      }
 
-    // 计算处理时间
-    const endTime = performance.now();
-    const detectionTime = endTime - startTime;
+      this.lastDetectTime = startTime;
 
-    // 调用检测时间回调
-    if (this.options.onDetectionTime) {
-      this.options.onDetectionTime(detectionTime);
+      // 计算处理时间
+      const endTime = performance.now();
+      const detectionTime = endTime - startTime;
+
+      // 调用检测时间回调
+      if (this.options.onDetectionTime) {
+        this.options.onDetectionTime(detectionTime);
+      }
     }
 
     // Schedule the next frame
@@ -171,6 +184,32 @@ export class SegmentationProcessor {
     // 调用检测时间回调
     if (this.options.onDetectionTime) {
       this.options.onDetectionTime(detectionTime);
+    }
+  }
+
+  public async processVideo(videoElement: HTMLVideoElement, canvasElement: HTMLCanvasElement): Promise<void> {
+    this.videoElement = videoElement;
+    this.canvasElement = canvasElement;
+    this.canvasCtx = canvasElement.getContext("2d");
+
+    if (!this.canvasCtx) {
+      throw new Error("Could not get canvas context");
+    }
+
+    // Set canvas dimensions to match image
+    this.canvasElement.width = videoElement.videoWidth;
+    this.canvasElement.height = videoElement.videoHeight;
+
+    // Get camera stream
+    try {
+      this.videoElement.onloadeddata = () => {
+        this.videoElement.play();
+        this.isRunning = true;
+        this.processFrames();
+      };
+    } catch (error) {
+      console.error("Error accessing camera:", error);
+      throw error;
     }
   }
 
@@ -218,13 +257,6 @@ export class SegmentationProcessor {
         modelSelection: options.modelSelection,
       });
     }
-  }
-
-  /**
-   * Set background blur amount
-   */
-  public setBackgroundBlur(amount: number): void {
-    this.options.backgroundBlur = Math.max(0, Math.min(20, amount));
   }
 
   /**

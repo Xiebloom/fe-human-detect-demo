@@ -1,5 +1,6 @@
 import "./App.css";
 import MediaPipeDemo from "./components/MediaPipe/MediaPipeDemo";
+import { Nav } from "./components/Nav";
 import { TensorFlowDemo } from "./components/TensorFlow";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
@@ -33,21 +34,7 @@ function App() {
   return (
     <Router>
       <div className="app-container">
-        <header>
-          <h2 className="logo">「字在人后」</h2>
-          <nav className="main-nav">
-            <Link to="/" className="nav-btn home-btn">
-              首页
-            </Link>
-            <Link to="/tensorflow" className="nav-btn">
-              TensorFlow Demo
-            </Link>
-            <Link to="/mediapipe" className="nav-btn">
-              MediaPipe Demo
-            </Link>
-          </nav>
-        </header>
-
+        <Nav />
         <main className="content-area">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -57,7 +44,7 @@ function App() {
         </main>
 
         <footer>
-          <p>© 2025 「字在人后」 - 人体检测与分析演示应用</p>
+          <p> 2025 「字在人后」 - 人体检测与分析演示应用</p>
         </footer>
       </div>
     </Router>

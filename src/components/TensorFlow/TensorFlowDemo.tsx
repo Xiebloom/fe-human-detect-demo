@@ -3,7 +3,7 @@ import { createSegmentation } from "./utils/segment";
 
 import "./TensorFlowDemo.css";
 
-type MediaType = "camera" | "image" | "video";
+export type MediaType = "camera" | "image" | "video";
 
 export const TensorFlowDemo: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -73,8 +73,8 @@ export const TensorFlowDemo: React.FC = () => {
       if (fileType === "image" && imageRef.current) {
         await segmentationRef.current.processImage(imageRef.current, canvasRef.current);
       } else if (fileType === "video" && videoRef.current) {
+        await segmentationRef.current.processVideo(videoRef.current, canvasRef.current);
         videoRef.current.play();
-        await segmentationRef.current.startCamera(videoRef.current, canvasRef.current);
       }
     } catch (error) {
       console.error("Failed to process media:", error);
