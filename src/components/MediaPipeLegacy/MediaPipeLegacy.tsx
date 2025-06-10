@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createSegmentation } from "./utils/segment";
 
-import "./TensorFlowDemo.css";
+import "./MediaPipeLegacy.css";
 
 export type MediaType = "camera" | "image" | "video";
 
-export const TensorFlowDemo: React.FC = () => {
+export const MediaPipeLegacy: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);

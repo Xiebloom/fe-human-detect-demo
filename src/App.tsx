@@ -1,7 +1,7 @@
 import "./App.css";
 import MediaPipeDemo from "./components/MediaPipe/MediaPipeDemo";
 import { Nav } from "./components/Nav";
-import { TensorFlowDemo } from "./components/TensorFlow";
+import { MediaPipeLegacy } from "./components/MediaPipeLegacy";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 // Home component
@@ -25,6 +25,13 @@ function Home() {
             查看演示
           </Link>
         </div>
+        <div className="feature-card">
+          <h3>MediaPipe Legacy 演示</h3>
+          <p>基于 MediaPipe Legacy 的面部检测与姿态分析</p>
+          <Link to="/mediapipe-legacy" className="feature-btn">
+            查看演示
+          </Link>
+        </div>
       </div>
     </div>
   );
@@ -40,6 +47,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/tensorflow" element={<TensorFlowDemo />} />
             <Route path="/mediapipe" element={<MediaPipeDemo />} />
+            <Route path="/mediapipe-legacy" element={<MediaPipeLegacy />} />
           </Routes>
         </main>
       </div>
