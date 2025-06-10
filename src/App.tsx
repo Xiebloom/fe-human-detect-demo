@@ -2,6 +2,7 @@ import "./App.css";
 import MediaPipeDemo from "./components/MediaPipe/MediaPipeDemo";
 import { Nav } from "./components/Nav";
 import { MediaPipeLegacy } from "./components/MediaPipeLegacy";
+import { TensorFlowDemo } from "./components/TensorFlow";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 // Home component

@@ -18,6 +18,9 @@ export function Nav() {
         <Link to="/mediapipe" className={`nav-btn ${getActiveBtnCls("mediapipe")}`}>
           MediaPipe Demo
         </Link>
+        <Link to="/mediapipe-legacy" className={`nav-btn ${getActiveBtnCls("mediapipe-legacy")}`}>
+          MediaPipe Legacy Demo
+        </Link>
       </nav>
     </header>
   );
