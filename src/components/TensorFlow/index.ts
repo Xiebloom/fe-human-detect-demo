@@ -1,2 +1,2 @@
 export * from "./TensorFlowDemo";
-export * from "./tsModelSegmentor";
+export * from "./utils/segment";

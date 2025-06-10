@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { createTFSegmentation } from "./tsModelSegmentor";
+import { createTFSegmentation } from "./utils/segment";
 
 import "./TensorFlowDemo.css";
+import { ImageSampleSelect } from "../ImageSampleSelect";
 
 type MediaType = "camera" | "image" | "video";
 
@@ -11,7 +12,6 @@ export const TensorFlowDemo: React.FC = () => {
   const imageRef = useRef<HTMLImageElement>(null);
 
   const [isRunning, setIsRunning] = useState(false);
-  const [fileName, setFileName] = useState("");
   const [mediaType, setMediaType] = useState<MediaType>("image");
   const [detectionTime, setDetectionTime] = useState<number | null>(null);
   const segmentationRef = useRef<ReturnType<typeof createTFSegmentation> | null>(null);
@@ -41,7 +41,6 @@ export const TensorFlowDemo: React.FC = () => {
     if (!e.target.files || !e.target.files[0]) return;
 
     const file = e.target.files[0];
-    setFileName(file.name);
 
     // Stop any running segmentation
     if (isRunning && segmentationRef.current) {
@@ -86,7 +85,6 @@ export const TensorFlowDemo: React.FC = () => {
     if (!videoRef.current || !canvasRef.current || !segmentationRef.current) return;
 
     setMediaType("camera");
-    setFileName("");
 
     try {
       await segmentationRef.current.startCamera(videoRef.current, canvasRef.current);
@@ -155,12 +153,14 @@ export const TensorFlowDemo: React.FC = () => {
             {isRunning ? "停止" : "启动摄像头和分割"}
           </button>
 
-          <div className="upload-container">
-            <div className="file-input-wrapper">
-              <button className="file-input-btn">上传媒体</button>
-              <input type="file" id="media-upload" accept="image/*,video/*" onChange={handleFileUpload} />
+          <div className="flex-display-between-container">
+            <ImageSampleSelect imageElement={imageRef.current!} />
+            <div className="upload-container">
+              <div className="file-input-wrapper">
+                <button className="file-input-btn">上传媒体</button>
+                <input type="file" id="media-upload" accept="image/*,video/*" onChange={handleFileUpload} />
+              </div>
             </div>
-            <span className="file-name">{fileName}</span>
           </div>
 
           {detectionTime !== null && (

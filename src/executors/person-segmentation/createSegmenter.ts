@@ -1,7 +1,12 @@
 import { ImageSegmenter, FilesetResolver } from "@mediapipe/tasks-vision";
 
+let created: ImageSegmenter | null = null;
+
 export async function createSegmenter(runningMode: "IMAGE" | "VIDEO" = "IMAGE"): Promise<ImageSegmenter> {
   try {
+    if (created) {
+      return created;
+    }
     // Create a FilesetResolver to resolve dependencies
     const vision = await FilesetResolver.forVisionTasks(
       "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
@@ -19,6 +24,7 @@ export async function createSegmenter(runningMode: "IMAGE" | "VIDEO" = "IMAGE"):
       outputConfidenceMasks: true,
     });
 
+    created = imageSegmenter;
     return imageSegmenter;
   } catch (error) {
     console.error("Failed to create image segmenter:", error);

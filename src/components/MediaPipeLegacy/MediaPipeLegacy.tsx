@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { createSegmentation } from "./utils/segment";
 
 import "./MediaPipeLegacy.css";
+import { ImageSampleSelect } from "../ImageSampleSelect";
 
 export type MediaType = "camera" | "image" | "video";
 
@@ -154,12 +155,15 @@ export const MediaPipeLegacy: React.FC = () => {
             {isRunning ? "Stop" : "Start Camera and Segmentation"}
           </button>
 
-          <div className="upload-container">
-            <div className="file-input-wrapper">
-              <button className="file-input-btn">Upload Media</button>
-              <input type="file" id="media-upload" accept="image/*,video/*" onChange={handleFileUpload} />
+          <div className="flex-display-between-container">
+            <ImageSampleSelect imageElement={imageRef.current!} />
+            <div className="upload-container">
+              <div className="file-input-wrapper">
+                <button className="file-input-btn">Upload Media</button>
+                <input type="file" id="media-upload" accept="image/*,video/*" onChange={handleFileUpload} />
+                <span className="file-name">{fileName}</span>
+              </div>
             </div>
-            <span className="file-name">{fileName}</span>
           </div>
 
           {detectionTime !== null && (

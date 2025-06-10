@@ -3,7 +3,7 @@ import "./Nav.css";
 
 export function Nav() {
   const location = useLocation();
-  const getActiveBtnCls = (path: string) => (location.pathname.includes(path) ? "active-nav-btn" : "");
+  const getActiveBtnCls = (path: string) => (location.pathname.match(new RegExp(`${path}$`)) ? "active-nav-btn" : "");
 
   return (
     <header>

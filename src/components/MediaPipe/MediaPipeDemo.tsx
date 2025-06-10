@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { MediaPipeProvider, useMediaPipe } from "../../context/MediaPipeContext.tsx";
 import type { AnalysisMode, MediaType } from "./types";
 import { executeTask } from "./utils/executeTask.ts";
+import { ImageSampleSelect } from "../ImageSampleSelect/ImageSampleSelect.tsx";
 
 import "./MediaPipeDemo.css";
 
@@ -130,14 +131,22 @@ const MediaPipeDemoInner: React.FC = () => {
         </button>
       </div>
 
-      {/* upload */}
-      <div className="upload-container">
-        <div className="file-input-wrapper">
-          <button className="file-input-btn">Upload Media</button>
-          <input type="file" id="media-upload" accept="image/*,video/*" onChange={handleFileUpload} />
+      <div className="flex-display-between-container">
+        <ImageSampleSelect
+          imageElement={imageRef.current!}
+          onImageSelected={() => {
+            updateStatus("Image loaded", "success");
+          }}
+        />
+        {/* upload */}
+        <div className="upload-container">
+          <div className="file-input-wrapper">
+            <button className="file-input-btn">Upload Media</button>
+            <input type="file" id="media-upload" accept="image/*,video/*" onChange={handleFileUpload} />
+          </div>
         </div>
-        <span className="file-name">{fileName}</span>
       </div>
+      <span className="file-name">{fileName}</span>
 
       {/* media */}
       <div className="media-container">

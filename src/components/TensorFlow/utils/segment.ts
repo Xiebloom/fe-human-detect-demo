@@ -244,7 +244,7 @@ export class TFSegmentationProcessor {
    * Wait for segmenter to initialize
    */
   private async waitForSegmenter(): Promise<void> {
-    const maxAttempts = 20;
+    const maxAttempts = 200;
     let attempts = 0;
 
     while (!this.segmenter && attempts < maxAttempts) {
